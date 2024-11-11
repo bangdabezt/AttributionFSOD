@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python test.py configs/vfa/voc/vfa_split1/vfa_r101_c4_8xb4_voc-split1_1shot-fine-tuning.py work_dirs/vfa_r101_c4_8xb4_voc-split1_1shot-fine-tuning/iter_400.pth --eval mAP
