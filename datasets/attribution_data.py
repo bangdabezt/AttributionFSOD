@@ -11,17 +11,17 @@ from mmdet.core import eval_recalls
 from mmdet.datasets.builder import DATASETS
 
 from mmfewshot.detection.core import eval_map
-from .base import BaseFewShotDataset
+from mmfewshot.datasets.base import BaseFewShotDataset
 
 novel_class = None
 # pre-defined classes split for few shot setting
 ATTRIBUTION_SPLIT = dict(
-    ALL_CLASSES_SPLIT1=('aeroplane', 'bicycle', 'boat', 'bottle', 'car', 'cat',
+    ALL_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car', 'cat',
                         'chair', 'diningtable', 'dog', 'horse', 'person',
                         'pottedplant', 'sheep', 'train', 'tvmonitor', 'bird',
                         'bus', 'cow', 'motorbike', 'sofa'),
-    NOVEL_CLASSES_SPLIT1=('bird', 'bus', 'cow', 'motorbike', 'sofa'),
-    BASE_CLASSES_SPLIT1=('aeroplane', 'bicycle', 'boat', 'bottle', 'car',
+    NOVEL_CLASSES=('bird', 'bus', 'cow', 'motorbike', 'sofa'),
+    BASE_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car',
                          'cat', 'chair', 'diningtable', 'dog', 'horse',
                          'person', 'pottedplant', 'sheep', 'train',
                          'tvmonitor'))
