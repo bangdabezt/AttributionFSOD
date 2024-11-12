@@ -22,7 +22,7 @@ from mmdet.utils import collect_env
 import mmfewshot  # noqa: F401, F403
 from mmfewshot import __version__
 # from mmfewshot.detection.apis import train_detector
-from mmfewshot.detection.apis.train import train_detector
+from apis.train import train_detector
 from datasets import build_dataset
 from mmfewshot.detection.models import build_detector
 from mmfewshot.utils import get_root_logger

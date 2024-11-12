@@ -203,7 +203,7 @@ def build_dataloader(dataset: Dataset,
             worker_init_fn=init_fn,
             **kwargs)
     elif isinstance(dataset, NWayKShotDataset):
-        from .dataloader_wrappers import NWayKShotDataloader
+        from mmfewshot.detection.datasets.dataloader_wrappers import NWayKShotDataloader
         from mmfewshot.utils import multi_pipeline_collate_fn
         # `NWayKShotDataset` will return a list of DataContainer
         # `multi_pipeline_collate_fn` are designed to handle
@@ -260,7 +260,7 @@ def build_dataloader(dataset: Dataset,
             query_data_loader=query_data_loader,
             support_data_loader=support_data_loader)
     elif isinstance(dataset, TwoBranchDataset):
-        from .dataloader_wrappers import TwoBranchDataloader
+        from mmfewshot.detection.datasets.dataloader_wrappers import TwoBranchDataloader
         from mmfewshot.utils import multi_pipeline_collate_fn
         # `TwoBranchDataset` will return a list of DataContainer
         # `multi_pipeline_collate_fn` are designed to handle

@@ -13,10 +13,10 @@ data = dict(
     val=dict(classes='BASE_CLASSES'),
     test=dict(classes='BASE_CLASSES'),
     model_init=dict(classes='BASE_CLASSES'))
-lr_config = dict(warmup_iters=100, step=[12000, 16000])
-evaluation = dict(interval=3000)
-checkpoint_config = dict(interval=3000)
-runner = dict(max_iters=18000)
+lr_config = dict(warmup_iters=10, step=[2000, 2500])
+evaluation = dict(interval=1000)
+checkpoint_config = dict(interval=1000)
+runner = dict(max_iters=3000)
 optimizer = dict(lr=0.02)
 # model settings
 model = dict(roi_head=dict(bbox_head=dict(num_classes=15, num_meta_classes=15)))
