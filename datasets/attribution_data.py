@@ -11,16 +11,15 @@ from mmdet.core import eval_recalls
 from mmdet.datasets.builder import DATASETS
 
 from mmfewshot.detection.core import eval_map
-from mmfewshot.datasets.base import BaseFewShotDataset
+from mmfewshot.detection.datasets.base import BaseFewShotDataset
 
 novel_class = None
 # pre-defined classes split for few shot setting
 ATTRIBUTION_SPLIT = dict(
     ALL_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car', 'cat',
                         'chair', 'diningtable', 'dog', 'horse', 'person',
-                        'pottedplant', 'sheep', 'train', 'tvmonitor', 'bird',
-                        'bus', 'cow', 'motorbike', 'sofa'),
-    NOVEL_CLASSES=('bird', 'bus', 'cow', 'motorbike', 'sofa'),
+                        'pottedplant', 'sheep', 'train', 'tvmonitor', 'bird'),
+    NOVEL_CLASSES=('bird',),
     BASE_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car',
                          'cat', 'chair', 'diningtable', 'dog', 'horse',
                          'person', 'pottedplant', 'sheep', 'train',
@@ -35,7 +34,7 @@ class FewShotAttributionDataset(BaseFewShotDataset):
         classes (str | Sequence[str]): Classes for model training and
             provide fixed label for each class. When classes is string,
             it will load pre-defined classes in `FewShotAttributionDataset`.
-            For example: 'NOVEL_CLASSES_SPLIT1'.
+            For example: 'NOVEL_CLASSES'.
         num_novel_shots (int | None): Max number of instances used for each
             novel class. If is None, all annotation will be used.
             Default: None.
@@ -81,10 +80,7 @@ class FewShotAttributionDataset(BaseFewShotDataset):
                 if test_mode else 'Train dataset'
         else:
             self.dataset_name = dataset_name
-        self.SPLIT = VOC_SPLIT
-
-        # the split_id would be set value in `self.get_classes`
-        self.split_id = None
+        self.SPLIT = ATTRIBUTION_SPLIT
 
         assert classes is not None, f'{self.dataset_name}: classes in ' \
                                     f'`FewShotAttributionDataset` can not be None.'
@@ -118,15 +114,13 @@ class FewShotAttributionDataset(BaseFewShotDataset):
 
         It supports to load pre-defined classes splits.
         The pre-defined classes splits are:
-        ['ALL_CLASSES_SPLIT1', 'ALL_CLASSES_SPLIT2', 'ALL_CLASSES_SPLIT3',
-         'BASE_CLASSES_SPLIT1', 'BASE_CLASSES_SPLIT2', 'BASE_CLASSES_SPLIT3',
-         'NOVEL_CLASSES_SPLIT1','NOVEL_CLASSES_SPLIT2','NOVEL_CLASSES_SPLIT3']
+        ['ALL_CLASSES', 'BASE_CLASSES', 'NOVEL_CLASSES']
 
         Args:
             classes (str | Sequence[str]): Classes for model training and
                 provide fixed label for each class. When classes is string,
                 it will load pre-defined classes in `FewShotAttributionDataset`.
-                For example: 'NOVEL_CLASSES_SPLIT1'.
+                For example: 'NOVEL_CLASSES'.
 
         Returns:
             list[str]: List of class names.
@@ -135,7 +129,7 @@ class FewShotAttributionDataset(BaseFewShotDataset):
         if isinstance(classes, str):
             assert classes in self.SPLIT.keys(
             ), f'{self.dataset_name}: not a pre-defined classes or ' \
-               f'split in VOC_SPLIT'
+               'split in ATTRIBUTION_SPLIT'
             class_names = self.SPLIT[classes]
             if 'BASE_CLASSES' in classes:
                 assert self.num_novel_shots is None, \
@@ -145,7 +139,6 @@ class FewShotAttributionDataset(BaseFewShotDataset):
                 assert self.num_base_shots is None, \
                     f'{self.dataset_name}: NOVEL_CLASSES do not have ' \
                     f'base instances.'
-            self.split_id = int(classes[-1])
         elif isinstance(classes, (tuple, list)):
             class_names = classes
         else:
@@ -160,11 +153,10 @@ class FewShotAttributionDataset(BaseFewShotDataset):
         """
         ann_shot_filter = {}
         if self.num_novel_shots is not None:
-            for class_name in self.SPLIT[
-                    f'NOVEL_CLASSES_SPLIT{self.split_id}']:
+            for class_name in self.SPLIT['NOVEL_CLASSES']:
                 ann_shot_filter[class_name] = self.num_novel_shots
         if self.num_base_shots is not None:
-            for class_name in self.SPLIT[f'BASE_CLASSES_SPLIT{self.split_id}']:
+            for class_name in self.SPLIT['BASE_CLASSES']:
                 ann_shot_filter[class_name] = self.num_base_shots
         return ann_shot_filter
 
@@ -420,8 +412,8 @@ class FewShotAttributionDataset(BaseFewShotDataset):
                 Default: (100, 300, 1000).
             iou_thr (float | list[float]): IoU threshold. Default: 0.5.
             class_splits: (list[str] | None): Calculate metric of classes
-                split  defined in VOC_SPLIT. For example:
-                ['BASE_CLASSES_SPLIT1', 'NOVEL_CLASSES_SPLIT1'].
+                split  defined in ATTRIBUTION_SPLIT. For example:
+                ['BASE_CLASSES', 'NOVEL_CLASSES'].
                 Default: None.
 
         Returns:
@@ -568,26 +560,26 @@ class FewShotAttributionDefaultDataset(FewShotAttributionDataset):
             For example: [dict(method='TFA', setting='SPILT1_1shot')].
     """
 
-    voc_benchmark = {
-        f'SPLIT{split}_{shot}SHOT': [
+    attribution_benchmark = {
+        f'{shot}SHOT': [
             dict(
                 type='ann_file',
                 ann_file=f'data/few_shot_ann/voc/benchmark_{shot}shot/'
                 f'box_{shot}shot_{class_name}_train.txt',
                 ann_classes=[class_name])
-            for class_name in VOC_SPLIT[f'ALL_CLASSES_SPLIT{split}']
+            for class_name in ATTRIBUTION_SPLIT['ALL_CLASSES']
         ]
-        for shot in [1, 2, 3, 5, 10] for split in [1, 2, 3]
+        for shot in [1, 2, 3, 5, 10]
     }
 
     # pre-defined annotation config for model reproducibility
     DEFAULT_ANN_CONFIG = dict(
-        TFA=voc_benchmark,
-        FSCE=voc_benchmark,
-        Attention_RPN=voc_benchmark,
-        MPSR=voc_benchmark,
-        MetaRCNN=voc_benchmark,
-        FSDetView=voc_benchmark)
+        TFA=attribution_benchmark,
+        FSCE=attribution_benchmark,
+        Attention_RPN=attribution_benchmark,
+        MPSR=attribution_benchmark,
+        MetaRCNN=attribution_benchmark,
+        FSDetView=attribution_benchmark)
 
     def __init__(self, ann_cfg: List[Dict], **kwargs) -> None:
         super().__init__(ann_cfg=ann_cfg, **kwargs)

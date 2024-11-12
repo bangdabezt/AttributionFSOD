@@ -42,7 +42,7 @@ test_pipeline = [
             dict(type='Collect', keys=['img'])
         ])
 ]
-# classes splits are predefined in FewShotVOCDataset
+# classes splits are predefined in FewShotAttributionDataset
 data_root = 'data/VOCdevkit/'
 data = dict(
     samples_per_gpu=4,
@@ -55,7 +55,7 @@ data = dict(
         num_used_support_shots=200,
         save_dataset=False,
         dataset=dict(
-            type='FewShotVOCDataset',
+            type='FewShotAttributionDataset',
             ann_cfg=[
                 dict(
                     type='ann_file',
@@ -72,7 +72,7 @@ data = dict(
             instance_wise=False,
             dataset_name='query_dataset'),
         support_dataset=dict(
-            type='FewShotVOCDataset',
+            type='FewShotAttributionDataset',
             ann_cfg=[
                 dict(
                     type='ann_file',
@@ -89,7 +89,7 @@ data = dict(
             instance_wise=False,
             dataset_name='support_dataset')),
     val=dict(
-        type='FewShotVOCDataset',
+        type='FewShotAttributionDataset',
         ann_cfg=[
             dict(
                 type='ann_file',
@@ -99,7 +99,7 @@ data = dict(
         pipeline=test_pipeline,
         classes=None),
     test=dict(
-        type='FewShotVOCDataset',
+        type='FewShotAttributionDataset',
         ann_cfg=[
             dict(
                 type='ann_file',
@@ -113,7 +113,7 @@ data = dict(
         copy_from_train_dataset=True,
         samples_per_gpu=16,
         workers_per_gpu=1,
-        type='FewShotVOCDataset',
+        type='FewShotAttributionDataset',
         ann_cfg=None,
         img_prefix=data_root,
         pipeline=train_multi_pipelines['support'],

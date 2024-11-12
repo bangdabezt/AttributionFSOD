@@ -13,8 +13,7 @@ from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
 from mmcv.runner import (get_dist_info, init_dist, load_checkpoint,
                          wrap_fp16_model)
 
-from mmfewshot.detection.datasets import (build_dataloader, build_dataset,
-                                          get_copy_dataset_type)
+from datasets import build_dataloader, build_dataset, get_copy_dataset_type
 from mmfewshot.detection.models import build_detector
 
 

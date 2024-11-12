@@ -1,10 +1,10 @@
 _base_ = [
-    '../../../_base_/datasets/nway_kshot/base_voc_ms.py',
+    '../../../_base_/datasets/nway_kshot/base_attribution_ms.py',
     '../../../_base_/schedules/schedule.py', '../../vfa_r101_c4.py',
     '../../../_base_/default_runtime.py'
 ]
-# classes splits are predefined in FewShotVOCDataset
-# FewShotVOCDefaultDataset predefine ann_cfg for model reproducibility.
+# classes splits are predefined in FewShotAttributionDataset
+# FewShotAttributionDefaultDataset predefine ann_cfg for model reproducibility.
 data = dict(
     train=dict(
         save_dataset=False,

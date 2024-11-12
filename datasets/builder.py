@@ -17,7 +17,7 @@ from torch.utils.data import DataLoader, Dataset, Sampler
 from mmfewshot.utils.infinite_sampler import (DistributedInfiniteGroupSampler,
                                               DistributedInfiniteSampler,
                                               InfiniteGroupSampler)
-from mmfewshot.datasets.dataset_wrappers import (NWayKShotDataset, QueryAwareDataset,
+from mmfewshot.detection.datasets.dataset_wrappers import (NWayKShotDataset, QueryAwareDataset,
                                TwoBranchDataset)
 from .utils import get_copy_dataset_type
 
