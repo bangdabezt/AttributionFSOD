@@ -186,7 +186,7 @@ def main():
             workers_per_gpu=1,
             dist=False,
             shuffle=False)
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     if not distributed:
         model = MMDataParallel(model, device_ids=[0])
         show_kwargs = dict(show_score_thr=args.show_score_thr)

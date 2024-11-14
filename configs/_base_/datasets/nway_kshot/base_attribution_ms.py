@@ -43,13 +43,13 @@ test_pipeline = [
         ])
 ]
 # classes splits are predefined in FewShotAttributionDataset
-data_root = 'data/VOCdevkit/'
+data_root = 'data/attribution/'
 data = dict(
-    samples_per_gpu=4,
-    workers_per_gpu=4,
+    samples_per_gpu=1,
+    workers_per_gpu=1,
     train=dict(
         type='NWayKShotDataset',
-        num_support_ways=15,
+        num_support_ways=10,
         num_support_shots=1,
         one_support_shot_per_image=True,
         num_used_support_shots=200,
@@ -111,7 +111,7 @@ data = dict(
         classes=None),
     model_init=dict(
         copy_from_train_dataset=True,
-        samples_per_gpu=16,
+        samples_per_gpu=1,
         workers_per_gpu=1,
         type='FewShotAttributionDataset',
         ann_cfg=None,

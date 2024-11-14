@@ -11,6 +11,7 @@ from .utils import TestMixins
 class VFA(MetaRCNN, TestMixins):
     def __init__(self, *args, with_refine=False, **kwargs):
         super().__init__(*args, **kwargs)
+        # import pdb; pdb.set_trace()
         # refine results for COCO. We do not use it for VOC.
         self.with_refine = with_refine
     

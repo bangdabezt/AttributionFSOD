@@ -79,7 +79,7 @@ class VFARoIHead(MetaRCNNRoIHead):
 
     def __init__(self, vae_dim=2048, *args, **kargs) -> None:
         super().__init__(*args, **kargs)
-
+        # import pdb; pdb.set_trace()
         self.vae = VAE(vae_dim, vae_dim, vae_dim)
 
     def _bbox_forward_train(self, query_feats: List[Tensor],

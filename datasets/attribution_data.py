@@ -17,13 +17,10 @@ novel_class = None
 # pre-defined classes split for few shot setting
 ATTRIBUTION_SPLIT = dict(
     ALL_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car', 'cat',
-                        'chair', 'diningtable', 'dog', 'horse', 'person',
-                        'pottedplant', 'sheep', 'train', 'tvmonitor', 'bird'),
+                        'chair', 'diningtable', 'dog', 'horse', 'bird'),
     NOVEL_CLASSES=('bird',),
     BASE_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car',
-                         'cat', 'chair', 'diningtable', 'dog', 'horse',
-                         'person', 'pottedplant', 'sheep', 'train',
-                         'tvmonitor'))
+                         'cat', 'chair', 'diningtable', 'dog', 'horse'))
 
 
 @DATASETS.register_module()
@@ -564,12 +561,12 @@ class FewShotAttributionDefaultDataset(FewShotAttributionDataset):
         f'{shot}SHOT': [
             dict(
                 type='ann_file',
-                ann_file=f'data/few_shot_ann/voc/benchmark_{shot}shot/'
+                ann_file=f'data/few_shot_ann/attribution/benchmark_{shot}shot/'
                 f'box_{shot}shot_{class_name}_train.txt',
                 ann_classes=[class_name])
             for class_name in ATTRIBUTION_SPLIT['ALL_CLASSES']
         ]
-        for shot in [1, 2, 3, 5, 10]
+        for shot in [1] # 2, 3, 4, 5, 10
     }
 
     # pre-defined annotation config for model reproducibility
