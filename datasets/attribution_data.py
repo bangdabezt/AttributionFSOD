@@ -13,14 +13,20 @@ from mmdet.datasets.builder import DATASETS
 from mmfewshot.detection.core import eval_map
 from mmfewshot.detection.datasets.base import BaseFewShotDataset
 
-novel_class = None
+novel_class = 'V*BNFS'
 # pre-defined classes split for few shot setting
+# ATTRIBUTION_SPLIT = dict(
+#     ALL_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car', 'cat',
+#                         'chair', 'diningtable', 'dog', 'horse', 'bird'),
+#     NOVEL_CLASSES=('bird',),
+#     BASE_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car',
+#                          'cat', 'chair', 'diningtable', 'dog', 'horse'))
 ATTRIBUTION_SPLIT = dict(
-    ALL_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car', 'cat',
-                        'chair', 'diningtable', 'dog', 'horse', 'bird'),
-    NOVEL_CLASSES=('bird',),
-    BASE_CLASSES=('aeroplane', 'bicycle', 'boat', 'bottle', 'car',
-                         'cat', 'chair', 'diningtable', 'dog', 'horse'))
+    ALL_CLASSES=('cat', 'cow', 'dog', 'teddy bear', 'bird', 'sheep', 
+                        'horse', 'zebra', 'bear', 'elephant', novel_class),
+    NOVEL_CLASSES=(novel_class,),
+    BASE_CLASSES=('cat', 'cow', 'dog', 'teddy bear', 'bird', 'sheep', 
+                        'horse', 'zebra', 'bear', 'elephant'))
 
 
 @DATASETS.register_module()
@@ -219,25 +225,33 @@ class FewShotAttributionDataset(BaseFewShotDataset):
         img_names = mmcv.list_from_file(ann_file)
         for img_name in img_names:
             # ann file in image path format
-            if 'VOC2007' in img_name:
-                dataset_year = 'VOC2007'
+            if 'COCO2017' in img_name:
+                dataset_year = 'COCO2017'
                 img_id = img_name.split('/')[-1].split('.')[0]
                 filename = img_name
-            # ann file in image path format
-            elif 'VOC2012' in img_name:
-                dataset_year = 'VOC2012'
-                img_id = img_name.split('/')[-1].split('.')[0]
-                filename = img_name
-            # ann file in image id format
-            elif 'VOC2007' in ann_file:
-                dataset_year = 'VOC2007'
+            elif 'COCO2017' in ann_file:
+                dataset_year = 'COCO2017'
                 img_id = img_name
-                filename = f'VOC2007/JPEGImages/{img_name}.jpg'
-            # ann file in image id format
-            elif 'VOC2012' in ann_file:
-                dataset_year = 'VOC2012'
-                img_id = img_name
-                filename = f'VOC2012/JPEGImages/{img_name}.jpg'
+                filename = f'COCO2017/JPEGImages/{img_name}.jpg'
+            # if 'VOC2007' in img_name:
+            #     dataset_year = 'VOC2007'
+            #     img_id = img_name.split('/')[-1].split('.')[0]
+            #     filename = img_name
+            # # ann file in image path format
+            # elif 'VOC2012' in img_name:
+            #     dataset_year = 'VOC2012'
+            #     img_id = img_name.split('/')[-1].split('.')[0]
+            #     filename = img_name
+            # # ann file in image id format
+            # elif 'VOC2007' in ann_file:
+            #     dataset_year = 'VOC2007'
+            #     img_id = img_name
+            #     filename = f'VOC2007/JPEGImages/{img_name}.jpg'
+            # # ann file in image id format
+            # elif 'VOC2012' in ann_file:
+            #     dataset_year = 'VOC2012'
+            #     img_id = img_name
+            #     filename = f'VOC2012/JPEGImages/{img_name}.jpg'
             else:
                 raise ValueError('Cannot infer dataset year from img_prefix')
 
@@ -562,7 +576,7 @@ class FewShotAttributionDefaultDataset(FewShotAttributionDataset):
             dict(
                 type='ann_file',
                 ann_file=f'data/few_shot_ann/attribution/benchmark_{shot}shot/'
-                f'box_{shot}shot_{class_name}_train.txt',
+                'box_{}shot_{}_train.txt'.format(shot, class_name.split(' ')[0]),
                 ann_classes=[class_name])
             for class_name in ATTRIBUTION_SPLIT['ALL_CLASSES']
         ]
